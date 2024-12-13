@@ -19,3 +19,10 @@ This file includes most of the regression analysis employed in the report. Users
 
 ## Reports
 This folder contains the proposal and final project.
+
+## Data Recognition
+1. [Election project](https://www.electproject.org/election-data/voter-turnout-data) (Voter Turnout)
+2. [Florida Election Lab](https://election.lab.ufl.edu/data-archive/national/) (Voter Turnout)
+3. [American Presidency Project](https://www.presidency.ucsb.edu/statistics/data/election-year-presidential-preferences) (national polling data)
+4. [Harvard Presidential Election Data Base](https://doi.org/10.7910/DVN/42MVDX, Harvard Dataverse, V8, UNF:6:F0opd1IRbeYI9QyVfzglUw== [fileUNF])
+5. [Stats America](https://www.statsamerica.org/downloads/default.aspx) (demographic information)
