@@ -300,7 +300,7 @@ results <- bind_rows(ols_results, ridge_results, lasso_results) %>%
     estimate = round(estimate, digits = 3))
 ```
 
-Ultimately, all three methods perform very similar (@tbl-rmse). I plot the relationship between predicted and observed turnout in @fig-pred-turnout to demonstrate the relaitvely weak linear predictive power.
+Ultimately, all three methods perform very similar (@tbl-rmse). I plot the relationship between predicted and observed turnout in @fig-pred-turnout to demonstrate the relatively weak linear predictive power.
 
 ```{r}
 #| tbl-cap: Prediction RMSE
@@ -323,11 +323,11 @@ augment(ridge_final_fit, test_data) %>%
 # Limitations
 One major limitation of this method is the unaccounted dependence of the voter turnout of the same state. Clearly, the voter turnout in Alabama in 2020 is highly correlated with the voter turnout in Alabama in 2024. However, outside of general demographic trends, I was unable to capture that relationship in the model. A second limitation is the multicollinearity of some of the demographic variables. More work could be done to accurately account for these important demographic traits.
 
-## Future Work
+# Future Work
 
 Overall, it would be very interesting to continue this work on voter turnout to smaller scales. It is important to understand what traits or beliefs lead an individual to vote. State-level data makes it difficult to capture these nuanced trends. Moreover, future methods could account for the grouped structure of states, counties, or cities with a hierarchical model.
 
-### References
+# References
 1. [Election project](https://www.electproject.org/election-data/voter-turnout-data) (Voter Turnout)
 2. [Florida Election Lab](https://election.lab.ufl.edu/data-archive/national/) (Voter Turnout)
 3. [American Presidency Project](https://www.presidency.ucsb.edu/statistics/data/election-year-presidential-preferences) (national polling data)
