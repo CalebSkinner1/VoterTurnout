@@ -66,6 +66,7 @@ prep_data <- data %>%
 
 ```
 
+
 # Introduction
 
 In modern democracies, governments are built on the often razor thin margins of contentious elections. Political parties and partisan groups in countries like the United States spend billions of dollars in hopes of convincing voters to support their candidate. These organizations are certainly interested in flipping votes from their opponents, but, typically, a more reasonable goal is to coax likely supporters from their couches and persuade probable adversaries to stay home. In fact, throughout the United States history, much of the rules and regulations surrounding elections have been mired in this political drama. From Jim Crow laws to Voter ID laws (or lack thereof) to Rice's election day holiday, we cannot escape the political struggle over voter turnout. For these reasons, many groups have considerable interest in predicting and understanding the behavior of voter turnout. Even apolitical citizens can appreciate the general relationship that voter turnout has with the health of a democracy.
@@ -83,6 +84,7 @@ I also include demograhic information like income per capita, age, sex proportio
 # Simple OLS
 First, I assess the relationship using simple linear regression. I place the full results in @tbl-ols and the estimates without the demographic features in @tbl-ols2. The initial OLS results suggest that voter turnout of a state has a negative relationship with the previous margin in that state, but that voter turnout has an overall positive relationship with the national polling margin. The linear temporal relationship does not produce a statistically significant result. The different estimates in the result without demographic information reflects the importance of including demographic features in a model.
 
+
 ```{r}
 #| tbl-cap: OLS Estimates
 #| label: tbl-ols
@@ -94,7 +96,6 @@ lm_fit %>%
   clean_data_table()
 ```
 
-
 ```{r}
 #| tbl-cap: OLS Estimates (Demographics removed)
 #| label: tbl-ols2
@@ -104,7 +105,9 @@ lm_spec %>%
   clean_data_table()
 ```
 
+
 The national polling margin estimate is unexpected, but it is important to remember that this estimate relies on only 7 distinct elections. This makes it very difficult to draw inference on this scale. A more complex hierarchical model is likely be better suited to handle the group structure and estimate this effect than ols. I plot the relationship between national polling margin and voter turnout with a loess smoothing curve in @fig-national in illustrate my point. In fact, at first, voter turnout decreases as national polling margin increases. Perhaps a better approached would be to categorizing elections as "close" or "not close".
+
 
 ```{r}
 #| fig-cap: National Polling Margin vs Voter Turnout
@@ -116,8 +119,10 @@ prep_data %>%
   labs(x = "", y = "")
 ```
 
+
 # Uncertainty Quantification
 Next, I create confidence intervals to express uncertainty around my estimates. To assess the assumption of normality, I plot the standardized residuals with the theoretical quantiles in @fig-qq and I conduct a Shapiro-Wilks Test of Normality. The qq-plot appears to be non-normal and the test rejects the null hypothesis of normality (p-value: .0043). For this reason, I compute nonparametric and residual BCa bootstrap intervals to compare with the normal confidence intervals. I place the intervals for the three quantities of interest in @tbl-ci. Overall, the three intervals are very similar and confirm the same conclusions as before. 
+
 
 ```{r}
 #| fig-cap: National Polling Margin vs Voter Turnout
@@ -150,8 +155,10 @@ combine_intervals(np_boot, prep_data, r_boot, lm_fit) %>%
   cols_label("res_upper" ~ "upper")
 ```
 
+
 # Weighted Regression
 Weighted Regression is typically used when the model possesses heteroskedastic errors. I plot the residuals against the fitted values in @fig-absolute-error. The errors appear relatively constant, but weighted regression is fun, so let's compute it anyway.
+
 
 ```{r}
 #| fig-cap: Absolute Errors vs Fitted Values
@@ -163,11 +170,13 @@ augment(lm_fit, new_data = prep_data) %>%
   labs(x = "Fitted Value", y = "Absolute Residuals")
 ```
 
+
 I compute the weights with the following formula
 \begin{equation*}
   w_i = \frac{1}{\hat{y_i}^2}
 \end{equation*}
 where $\hat{y_i}$ are the estimated residuals of the ols solution by the fitted values with a smoothing spline. In simple terms, the weighted regression organizes the weights so more influence is given to the observations with a larger residual. This should create more homoskedastic errors.
+
 
 ```{r}
 w <- 1/(predict(smooth.spline(lm_fit$fit$fitted.values, abs(lm_fit$fit$residuals)))$x)^2
@@ -175,7 +184,9 @@ w <- 1/(predict(smooth.spline(lm_fit$fit$fitted.values, abs(lm_fit$fit$residuals
 weighted_lm_fit <- lm(turnout_percentage ~ ., data = prep_data, weights = w)
 ```
 
+
 I compute the weighted least squares regression in @tbl-weighted-ols and find similar results as before.
+
 
 ```{r}
 #| tbl-cap: Weighted OLS
@@ -183,7 +194,9 @@ I compute the weighted least squares regression in @tbl-weighted-ols and find si
 weighted_lm_fit %>% clean_data_table()
 ```
 
+
 I check for homoskedasticity again in @fig-absolute-error2, and it appears not much has changed. This is likely because the variance was already fairly homoscedastic to begin with.
+
 
 ```{r}
 #| fig-cap: Absolute Errors vs Fitted Values
@@ -196,8 +209,10 @@ augment(weighted_lm_fit, new_data = prep_data) %>%
   labs(x = "Fitted Value", y = "Absolute Residuals")
 ```
 
+
 # Robust Regression
 Robust Regression is one method to reduce the effect of outliers on estimates. The model does not appear to have many strong outliers, but a few observations do have high leverage. I compute robust regression by minimizing mean absolute error instead of mean squared error. This is a specific form of quantile regression (with $\tau = .5$). Interestingly, The estimate is an unbiased estimate of the median instead of the mean. I compute the results and place the estimates in @tbl-robust-regression. The estimates and confidence intervals are similar to OLS.
+
 
 ```{r}
 #| tbl-cap: Robust Regression
@@ -208,8 +223,10 @@ quant_fit %>%
   clean_data_table()
 ```
 
+
 # Prediction
 Lastly, I am interested in measuring Linear Regression's ability to predict the voter turnout in the 2024 election. I train the data on the 2000-2020 presidential elections and test the results on 2024. For comparison, I use ols, ridge regression, and lasso regression. The penalty term of both ridge and lasso are estimated with cross validation on the training data. I choose the penalty term that minimizes the mean squared error of the prediction. 
+
 
 ```{r}
 train_data <- prep_data %>% filter(year != 2024)
@@ -300,7 +317,9 @@ results <- bind_rows(ols_results, ridge_results, lasso_results) %>%
     estimate = round(estimate, digits = 3))
 ```
 
+
 Ultimately, all three methods perform very similar (@tbl-rmse). I plot the relationship between predicted and observed turnout in @fig-pred-turnout to demonstrate the relaitvely weak linear predictive power.
+
 
 ```{r}
 #| tbl-cap: Prediction RMSE
@@ -308,7 +327,6 @@ Ultimately, all three methods perform very similar (@tbl-rmse). I plot the relat
 results %>% gt() %>%
   gt_theme_538()
 ```
-
 
 ```{r}
 #| fig-cap: Predicted Turnout vs Observed Turnout (Ridge)
@@ -319,6 +337,7 @@ augment(ridge_final_fit, test_data) %>%
   labs(x = "", y = "")
 
 ```
+
 
 # Limitations
 One major limitation of this method is the unaccounted dependence of the voter turnout of the same state. Clearly, the voter turnout in Alabama in 2020 is highly correlated with the voter turnout in Alabama in 2024. However, outside of general demographic trends, I was unable to capture that relationship in the model. A second limitation is the multicollinearity of some of the demographic variables. More work could be done to accurately account for these important demographic traits.
@@ -335,4 +354,5 @@ Overall, it would be very interesting to continue this work on voter turnout to 
 5. [Stats America](https://www.statsamerica.org/downloads/default.aspx) (demographic information)
 
 Again, for access to data, work, or further explanation, see [my GitHub page](https://github.com/CalebSkinner1/VoterTurnout).
+
 
