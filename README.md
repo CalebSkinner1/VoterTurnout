@@ -1,6 +1,6 @@
 ## VoterTurnout GitHub Page
 
-This readme file is written to explain this document and show you how to run its files.
+This readme file is written to explain this document and show you how to run its files. This project uses various regression methods to analyze the relationship between how close an election is to the voter turnout on the state level. In particular, I analyze effects of the national polling average and the results of the previous elections on each state's voter turnout.
 
 ## How to Run these Files
 After downloading the files, users will need to download several packages including here, janitor, tidyverse, tidymodels, gt, gtExtras, ggfortify, and quantreg. Depending on where the files are saved, users may need to update the data_path object listed at the top of the files.
