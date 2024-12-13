@@ -1,0 +1,35 @@
+---
+title: "Project Proposal - Voter Turnout"
+author: "Caleb Skinner"
+date: "October 15, 2024"
+format: pdf
+---
+```{r setup, include = FALSE}
+# knitr settings
+knitr::opts_chunk$set(
+  comment = "#", fig.height = 3, 
+  cache = FALSE, collapse = TRUE,
+  error = TRUE, echo = FALSE,
+  message = FALSE,
+  warning = FALSE)
+
+# libraries
+library("here")
+library("tidyverse"); theme_set(theme_minimal())
+source(here("Project/wrangling.R"))
+
+```
+
+I am interested in identifying the factors that impact voter turnout. For instance, it has been suggested that states with highly contested races tend to have higher turnouts. I am interested in quantifying this relationship. Moreover, I am curious of the impact of total campaign events and total advertisement spending. I have added various demographic information like income, employment, race, age, and sex.
+
+Generally, I propose four major factors impact voter turnout: perceived close race, perceived vote impact, excitement for candidates, and demographic factors. I measure the variable "perceived close race" with the national polling average leading up to the election. I don't have access to state-level polling data, so I measure "perceived vote impact" with the margin in the previous year's presidential election in that state. I hope to measure the excitement for the candidates with advertisements and campaign events.
+
+I have compiled a state-level data set with the results of each presidential elections since 2000. Unfortunately, this only provides me with 306 data points (with the potential for an additional 51 by the time this project is due). In this project, I will regress my predictors on the total number of votes (or voter turnout rate) using various methods.
+
+Overall, I utilize several sources. The voter turnout data comes from [Election project](https://www.electproject.org/election-data/voter-turnout-data), [national polling data](https://www.presidency.ucsb.edu/statistics/data/election-year-presidential-preferences) from Gallup and Real Clear Politics, presidential election data from a [Harvard data base](https://doi.org/10.7910/DVN/42MVDX, Harvard Dataverse, V8, UNF:6:F0opd1IRbeYI9QyVfzglUw== [fileUNF]), and demographic information from [Stats America](https://www.statsamerica.org/downloads/default.aspx). As I continue this project, it is likely that I will be looking for more covariates. For example, I will be looking for advertisement data and campaign visit data.
+
+Outside of the modelling and analysis, I anticipate a few issues with missing data. Some of the demographic information is only present from 2001-2019. This may require me to estimate the values for 2000 and 2020. Moreover, the demographic information is only present for 46 of the 51 states. I will need to assess the value of this information and decide a course of action.
+
+
+
+
