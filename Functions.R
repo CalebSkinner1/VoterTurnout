@@ -1,5 +1,6 @@
 # Functions
 
+library("tidymodels")
 library("patchwork")
 library("bcaboot")
 library("boot")

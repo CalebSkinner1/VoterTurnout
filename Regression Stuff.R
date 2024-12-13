@@ -14,12 +14,13 @@ library("gt")
 library("gtExtras")
 library("ggfortify")
 library("janitor")
+library("quantreg")
 
 # data path
-data_path <- "Project/Data"
+data_path <- "Data"
 
 # functions
-source(here("Project/Functions.R"))
+source(here("Functions.R"))
 
 # read data
 data <- read_csv(here(data_path, "complete_data.csv"))
