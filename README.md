@@ -20,7 +20,7 @@ This file includes most of the regression analysis employed in the report. Users
 ## Reports
 This folder contains the proposal and final project.
 
-## Data Recognition
+## Data
 1. [Election project](https://www.electproject.org/election-data/voter-turnout-data) (Voter Turnout)
 2. [Florida Election Lab](https://election.lab.ufl.edu/data-archive/national/) (Voter Turnout)
 3. [American Presidency Project](https://www.presidency.ucsb.edu/statistics/data/election-year-presidential-preferences) (national polling data)
